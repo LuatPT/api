@@ -19,6 +19,7 @@ import com.api.entity.Trainer;
 import com.api.service.TrainerService;
 
 @RestController
+@RequestMapping("/v1")
 public class TrainerController {
 
 	private TrainerService trainerService;
@@ -28,10 +29,10 @@ public class TrainerController {
 		this.trainerService = trainerService;
 	}
 
-	@RequestMapping(value = "/trainers", method = RequestMethod.GET)
+	@RequestMapping(value = "/trainers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Trainer>> listAllTrainer() {
 		List<Trainer> listTrainer = trainerService.findAllTrainer();
-		return new ResponseEntity<List<Trainer>>(listTrainer, HttpStatus.OK); 
+		return new ResponseEntity<List<Trainer>>(listTrainer, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/trainers/{trainer_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,22 +49,26 @@ public class TrainerController {
 	public ResponseEntity<Trainer> createtrainer(@RequestBody Trainer trainer, UriComponentsBuilder builder) {
 		trainerService.save(trainer);
 		HttpHeaders headers = new HttpHeaders();
-		//Set url
+		// Set url
 		headers.setLocation(builder.path("/trainers/{trainerId}").buildAndExpand(trainer.getTrainerId()).toUri());
 		return new ResponseEntity<Trainer>(trainer, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/trainers/{trainer_id}", method = RequestMethod.PUT)
-	public ResponseEntity<Trainer> updatetrainer(@PathVariable("trainer_id") Integer trainerId, @RequestBody Trainer trainer) {
+	public ResponseEntity<Trainer> updatetrainer(@PathVariable("trainer_id") Integer trainerId,
+			@RequestBody Trainer trainer) {
 		Optional<Trainer> currenttrainer = trainerService.findById(trainerId);
 
 		if (!currenttrainer.isPresent()) {
 			return new ResponseEntity<Trainer>(HttpStatus.NO_CONTENT);
 		}
 
-//	        currenttrainer.get().setID(trainer.getName());
-//	        currenttrainer.get().setPrice(trainer.getPrice());
-//	      currenttrainer.get().setDescription(trainer.getDescription());
+		currenttrainer.get().setTrainerId(trainer.getTrainerId());
+		currenttrainer.get().setTrainerName(trainer.getTrainerName());
+		currenttrainer.get().setTrainerAvatar(trainer.getTrainerAvatar());
+		currenttrainer.get().setExperience(trainer.getExperience());
+		currenttrainer.get().setTrainerCost(trainer.getTrainerCost());
+		currenttrainer.get().setTrainerQuote(trainer.getTrainerQuote());
 
 		trainerService.save(currenttrainer.get());
 		return new ResponseEntity<Trainer>(currenttrainer.get(), HttpStatus.OK);

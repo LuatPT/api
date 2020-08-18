@@ -13,11 +13,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "trainers")
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Trainer implements Serializable {
 
