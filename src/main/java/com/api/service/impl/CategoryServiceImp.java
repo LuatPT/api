@@ -25,11 +25,10 @@ public class CategoryServiceImp implements CategoryService {
 		return (List<Category>) categoryRepository.findAll();
 	}
 
-	
-	public Optional<Category> findById(Integer id) {
+
+	public Category findById(Integer id) {
 		return categoryRepository.findById(id);
 	}
-
 	
 	public void save(Category category) {
 		categoryRepository.save(category);

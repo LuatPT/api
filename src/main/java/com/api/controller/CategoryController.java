@@ -1,7 +1,6 @@
 package com.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,12 +36,8 @@ public class CategoryController {
 
 	@RequestMapping(value = "/categorys/{category_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Category> getCategoryById(@PathVariable("category_id") Integer categoryId) {
-		Optional<Category> category = categoryService.findById(categoryId);
-
-		if (!category.isPresent()) {
-			return new ResponseEntity<Category>(category.get(), HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<Category>(category.get(), HttpStatus.OK);
+		Category category = categoryService.findById(categoryId);
+		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/categorys", method = RequestMethod.POST)
@@ -57,26 +52,26 @@ public class CategoryController {
 	@RequestMapping(value = "/categorys/{category_id}", method = RequestMethod.PUT)
 	public ResponseEntity<Category> updatecategory(@PathVariable("category_id") Integer categoryId,
 			@RequestBody Category category) {
-		Optional<Category> currentcategory = categoryService.findById(categoryId);
+		Category currentcategory = categoryService.findById(categoryId);
 
-		if (!currentcategory.isPresent()) {
+		if (currentcategory== null) {
 			return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
 		}
 
-		currentcategory.get().setCategoryId(category.getCategoryId());
-		currentcategory.get().setCategoryName(category.getCategoryName());
-		currentcategory.get().setCategoryStatus(category.getCategoryStatus());
-		categoryService.save(currentcategory.get());
-		return new ResponseEntity<Category>(currentcategory.get(), HttpStatus.OK);
+		currentcategory.setCategoryId(category.getCategoryId());
+		currentcategory.setCategoryName(category.getCategoryName());
+		currentcategory.setCategoryStatus(category.getCategoryStatus());
+		categoryService.save(currentcategory);
+		return new ResponseEntity<Category>(currentcategory, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/categorys/{category_id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Category> deletecategory(@PathVariable("category_id") Integer categoryId) {
-		Optional<Category> category = categoryService.findById(categoryId);
-		if (!category.isPresent()) {
+		Category category = categoryService.findById(categoryId);
+		if (category== null) {
 			return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
 		}
-		categoryService.remove(category.get());
+		categoryService.remove(category);
 		return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
 	}
 }
