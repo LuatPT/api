@@ -64,8 +64,8 @@ public class CartController {
 		}
 
 		currentcart.get().setCartId(cart.getCartId());
-		currentcart.get().setUserId(cart.getUserId());;
-		currentcart.get().setProductId(cart.getProductId());;
+		currentcart.get().setUserId(cart.getUserId());
+		currentcart.get().setProductId(cart.getProductId());
 		currentcart.get().setSoluong(cart.getSoluong());
 		
 		cartService.save(currentcart.get());
