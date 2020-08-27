@@ -1,7 +1,6 @@
 package com.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,12 +36,12 @@ public class ProductController {
 
 	@RequestMapping(value = "/products/{product_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Product> getProductById(@PathVariable("product_id") Integer productId) {
-		Optional<Product> product = productService.findById(productId);
+		Product product = productService.findById(productId);
 
-		if (!product.isPresent()) {
-			return new ResponseEntity<Product>(product.get(), HttpStatus.NO_CONTENT);
+		if (product == null) {
+			return new ResponseEntity<Product>(product, HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Product>(product.get(), HttpStatus.OK);
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/products", method = RequestMethod.POST)
@@ -57,32 +56,32 @@ public class ProductController {
 	@RequestMapping(value = "/products/{product_id}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> updateProduct(@PathVariable("product_id") Integer productId,
 			@RequestBody Product product) {
-		Optional<Product> currentProduct = productService.findById(productId);
+		Product currentProduct = productService.findById(productId);
 
-		if (!currentProduct.isPresent()) {
+		if (currentProduct== null) {
 			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
 		}
 
-		currentProduct.get().setProductId(product.getProductId());
-		currentProduct.get().setProductName(product.getProductName());
-		currentProduct.get().setCategoryId(product.getCategoryId());
-		currentProduct.get().setProductImg(product.getProductImg());
-		currentProduct.get().setProductNote(product.getProductNote());
-		currentProduct.get().setProductPrice(product.getProductPrice());
-		currentProduct.get().setProductSale(product.getProductSale());
-		currentProduct.get().setProductEndSale(product.getProductEndSale());
+		currentProduct.setProductId(product.getProductId());
+		currentProduct.setProductName(product.getProductName());
+		currentProduct.setCategoryId(product.getCategoryId());
+		currentProduct.setProductImg(product.getProductImg());
+		currentProduct.setProductNote(product.getProductNote());
+		currentProduct.setProductPrice(product.getProductPrice());
+		currentProduct.setProductSale(product.getProductSale());
+		currentProduct.setProductEndSale(product.getProductEndSale());
 		
-		productService.save(currentProduct.get());
-		return new ResponseEntity<Product>(currentProduct.get(), HttpStatus.OK);
+		productService.save(currentProduct);
+		return new ResponseEntity<Product>(currentProduct, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/products/{product_id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Product> deleteCart(@PathVariable("product_id") Integer productId) {
-		Optional<Product> product = productService.findById(productId);
-		if (!product.isPresent()) {
+		Product product = productService.findById(productId);
+		if (product == null) {
 			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
-		productService.remove(product.get());
+		productService.remove(product);
 		return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
 	}
 }
