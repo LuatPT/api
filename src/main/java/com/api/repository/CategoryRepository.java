@@ -22,11 +22,11 @@ public class CategoryRepository  {
 	public List<Category> findAll() {
 		
 //		HQL
-//		String sql = "SELECT b FROM Category b";
-//		Query query= entityManager.createQuery(sql.toString());
+		String sql = "SELECT b FROM Category b";
+		Query query= entityManager.createQuery(sql.toString());
 //		Native SQL
-		String sql = "SELECT * FROM categorys";
-		Query query= entityManager.createNativeQuery(sql.toString());
+//		String sql = "SELECT * FROM categorys";
+//		Query query= entityManager.createNativeQuery(sql.toString());
 		List<Category> listCategories = null;
 		try {
 			listCategories = (List<Category>) query.getResultList();
